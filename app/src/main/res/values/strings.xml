@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">Parking Oracle</string>
+    <string name="main1">View Current Availability</string>
+    <string name="main2">View All Day Availability</string>
+    <string name="garage1">Call Street</string>
+    <string name="garage2">Saint Augustine Street</string>
+    <string name="garage3">Spirit Way</string>
+    <string name="garage4">Traditions Way</string>
+    <string name="garage5">Pensacola Street</string>
+    <string name="garage6">Woodward Avenue</string>
+    <string name="garage7">Call Street[Faculty]</string>
+    <string name="garage8">Spirit Way[Faculty]</string>
+    <string name="callstreetmax">786</string>
+    <string name="Max_Capacity">Max Capacity</string>
+    <string name="st_augustine_str">839</string>
+    <string name="spirit_max">1186</string>
+    <string name="tradmx">795</string>
+    <string name="pensamax">1118</string>
+    <string name="woodmax">928</string>
+    <string name="callfmax">132</string>
+    <string name="spiritfmax">288</string>
+    <string name="garage_name">  Garage Name</string>
+    <string name="spots">Spots Open</string>
+    <string name="_0">0</string>
+    <string name="home">Home</string>
+    <string name="graphs">Graphs</string>
+    <string name="settings">Settings</string>
+    <string name="_786">786</string>
+    <string-array name="garage_array">
+        <item>Call Street</item>
+        <item>Saint Augustine Street</item>
+        <item>Spirit Way</item>
+        <item>Traditions Way</item>
+        <item>Pensacola Street</item>
+        <item>Woodward Avenue</item>
+        <item>Call Street[Faculty]</item>
+        <item>Spirit Way[Faculty]</item>
+    </string-array>
+    <string-array name="garagecapacities">
+        <item>786</item>
+        <item>839</item>
+        <item>1186</item>
+        <item>795</item>
+        <item>1118</item>
+        <item>928</item>
+        <item>132</item>
+        <item>288</item>
+    </string-array>
+</resources>
