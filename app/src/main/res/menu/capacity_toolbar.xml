@@ -8,10 +8,5 @@
             android:icon="@drawable/parking"
             android:title="options"
             app:showAsAction="always" />
-        <item
-            android:id="@+id/options2"
-            android:icon="@drawable/parking"
-            android:title="options"
-            app:showAsAction="always" />
 
     </menu>

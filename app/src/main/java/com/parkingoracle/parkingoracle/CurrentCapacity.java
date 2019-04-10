@@ -32,7 +32,7 @@ public class CurrentCapacity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_currrent_capacity);
+        setContentView(R.layout.activity_main);
         textViewArray = new TextView[]{
                 findViewById(R.id.currentcall), findViewById(R.id.currentaug), findViewById(R.id.currentspirit),
                 findViewById(R.id.currenttraditions), findViewById(R.id.currentpen), findViewById(R.id.currentwood),
@@ -44,7 +44,7 @@ public class CurrentCapacity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.topnavigation, menu);
+        inflater.inflate(R.menu.capacity_toolbar, menu);
         return true;
     }
 
@@ -57,7 +57,7 @@ public class CurrentCapacity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://garageoracle.net/data";
+            String url = "https://www.garageoracle.net/data";
             String jsonStr = sh.makeServiceCall(url);
             Log.e(className, "Response from url: " + jsonStr);
             if (jsonStr != null) {
