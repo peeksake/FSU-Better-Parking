@@ -4,9 +4,15 @@
 
 
         <item
-            android:id="@+id/options"
-            android:icon="@drawable/parking"
-            android:title="options"
-            app:showAsAction="always" />
+        android:id="@+id/Faculty"
+        android:icon="@drawable/f"
+        android:title="options"
+        app:showAsAction="always" />
 
-    </menu>
+    <item
+        android:id="@+id/Student"
+        android:icon="@drawable/s"
+        android:title="options"
+        app:showAsAction="always" />
+
+</menu>

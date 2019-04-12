@@ -26,6 +26,7 @@
     <string name="graphs">Graphs</string>
     <string name="settings">Settings</string>
     <string name="_786">786</string>
+    <string name="spots_open">Spots Open</string>
     <string-array name="garage_array">
         <item>Call Street</item>
         <item>Saint Augustine Street</item>
