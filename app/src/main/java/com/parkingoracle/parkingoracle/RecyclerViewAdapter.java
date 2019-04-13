@@ -29,6 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mSpotsOpen = SpotsOpen;
     }
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         Log.d( Tag, "onCreateViewHolder: called.");
@@ -44,12 +45,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         viewHolder.garageName.setText(mGarageNames.get(i));
         viewHolder.maxCapacity.setText(mMaxCapacties.get(i));
-        viewHolder.spotsOpen.setText(mSpotsOpen.get(i));
+        if(mSpotsOpen!=null && mSpotsOpen.size() > i)
+            viewHolder.spotsOpen.setText(mSpotsOpen.get(i));
+
     }
 
     @Override
     public int getItemCount() {
-        return mSpotsOpen.size();
+        return mGarageNames.size();
     }
 
 

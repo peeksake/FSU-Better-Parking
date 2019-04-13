@@ -2,6 +2,7 @@ package com.parkingoracle.parkingoracle;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private SwipeRefreshLayout swipeContainer;
+    private Toolbar toolbar;
     private String className = MainActivity.class.getSimpleName();
     List<String> maxCapacities = Arrays.asList("786","839", "1186", "795", "1118", "928", "132", "288");
     List<String> garageNames = Arrays.asList("Call Street", "Saint Augustine Street","Spirit Way", "Traditions Way", "Pensacola Street", "Woodward Avenue", "Pensacola Street", "Woodward Avenue");
@@ -31,10 +35,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar = findViewById(R.id.toolbar);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
         setSupportActionBar(toolbar);
+
         initRecyclerView();
-        new GetGarageCapacities().execute();
+        updateList();
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                updateList();
+            }
+        });
+
+
+
+    }
+
+    private void updateList() {
+        AsyncTask getData = new GetGarageCapacities().execute();
+        try {
+            getData.get();
+            recyclerViewAdapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(false);
+        } catch (Exception e) {
+            Log.d("Exception ", e.toString());
+        }
     }
 
     private class GetGarageCapacities extends AsyncTask<Void, Void, Void> {
@@ -84,8 +116,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            }
+           /* AsyncTask getData = new GetGarageCapacities().execute();
+            try {
+                getData.get();
+                recyclerViewAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                Log.d("Exception ", e.toString());
+            }*/
+
         }
+    }
 
         //Inflates the toolbar with options
     @Override
@@ -105,10 +145,9 @@ public class MainActivity extends AppCompatActivity {
     //Intializes the garageviews
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.RecyclerView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, garageNames, maxCapacities, spotsOpen);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, garageNames, maxCapacities, spotsOpen);
+        recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setElevation(1);
     }
 }
