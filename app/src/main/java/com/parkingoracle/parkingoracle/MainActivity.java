@@ -26,35 +26,39 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter recyclerViewAdapter;
     private SwipeRefreshLayout swipeContainer;
     private Toolbar toolbar;
+    private boolean viewMode; //Student or Faculty
     private String className = MainActivity.class.getSimpleName();
-    List<String> maxCapacities = Arrays.asList("786","839", "1186", "795", "1118", "928", "132", "288");
-    List<String> garageNames = Arrays.asList("Call Street", "Saint Augustine Street","Spirit Way", "Traditions Way", "Pensacola Street", "Woodward Avenue", "Pensacola Street", "Woodward Avenue");
+    List<String> maxCapacities = Arrays.asList("786", "839", "1186", "795", "1118", "928", "132", "288");
+    List<String> garageNames = Arrays.asList("Call Street", "Saint Augustine Street", "Spirit Way", "Traditions Way", "Pensacola Street", "Woodward Avenue", "Pensacola Street", "Woodward Avenue");
     List<String> spotsOpen = new ArrayList<>();
+    List<String> liveFeed = new ArrayList<>();
+    List<String> maxCapacitiesFeed = new ArrayList<>();
+    List<String> garageNamesFeed = new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
+        viewMode = true;
         toolbar = findViewById(R.id.toolbar);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer = findViewById(R.id.swipeContainer);
 
         setSupportActionBar(toolbar);
 
-        initRecyclerView();
         updateList();
+        initRecyclerView();
+
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
                 updateList();
             }
         });
-
-
 
     }
 
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     JSONArray jsonArray = jsonObj.getJSONArray("garagearrays");
 
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Integer capacity = (Integer) jsonArray.getJSONArray(i).get(1);
                         if (capacity >= Integer.parseInt(maxCapacities.get(i))) {
@@ -116,18 +121,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-           /* AsyncTask getData = new GetGarageCapacities().execute();
-            try {
-                getData.get();
-                recyclerViewAdapter.notifyDataSetChanged();
-            } catch (Exception e) {
-                Log.d("Exception ", e.toString());
-            }*/
-
         }
     }
 
-        //Inflates the toolbar with options
+    //Inflates the toolbar with options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -139,15 +136,46 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.Faculty) {
+            viewMode = false;
+            initRecyclerView();
+            findViewById(id).setVisibility(View.GONE);
+            findViewById(R.id.Student).setVisibility(View.VISIBLE);
+        }
+        if (id == R.id.Student) {
+            viewMode = true;
+            initRecyclerView();
+            findViewById(id).setVisibility(View.GONE);
+            findViewById(R.id.Faculty).setVisibility(View.VISIBLE);// Makes other view unclickable
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     //Intializes the garageviews
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewAdapter = new RecyclerViewAdapter(this, garageNames, maxCapacities, spotsOpen);
+        setRecyclerBasedOffMode();
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setElevation(1);
+    }
+
+    private void setRecyclerBasedOffMode() {
+        liveFeed.clear();
+        maxCapacitiesFeed.clear();//resets lists
+        garageNamesFeed.clear();
+
+        if (viewMode == true) {
+            garageNamesFeed.addAll(garageNames.subList(0,6));
+            maxCapacitiesFeed.addAll(maxCapacities.subList(0,6));
+            liveFeed.addAll(spotsOpen.subList(0,6));
+        } else {
+            garageNamesFeed.addAll(garageNames.subList(6,8));
+            maxCapacitiesFeed.addAll(maxCapacities.subList(6,8));
+            liveFeed.addAll(spotsOpen.subList(6,8));
+        }
+
+        recyclerViewAdapter = new RecyclerViewAdapter(this, garageNamesFeed, maxCapacitiesFeed, liveFeed);
     }
 }

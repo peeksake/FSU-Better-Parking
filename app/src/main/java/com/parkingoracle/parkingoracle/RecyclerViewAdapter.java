@@ -57,7 +57,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         TextView garageName, maxCapacity, spotsOpen;
         RelativeLayout parentLayout;
 
