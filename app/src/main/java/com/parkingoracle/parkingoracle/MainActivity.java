@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter recyclerViewAdapter;
     private SwipeRefreshLayout swipeContainer;
     private Toolbar toolbar;
-    private boolean viewMode; //Student or Faculty
+    private boolean viewFacultyMode; //Student or Faculty
     private String className = MainActivity.class.getSimpleName();
     List<String> maxCapacities = Arrays.asList("786", "839", "1186", "795", "1118", "928", "132", "288");
     List<String> garageNames = Arrays.asList("Call Street", "Saint Augustine Street", "Spirit Way", "Traditions Way", "Pensacola Street", "Woodward Avenue", "Pensacola Street", "Woodward Avenue");
@@ -36,13 +35,12 @@ public class MainActivity extends AppCompatActivity {
     List<String> garageNamesFeed = new ArrayList<>();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
-        viewMode = true;
+        viewFacultyMode = true;
         toolbar = findViewById(R.id.toolbar);
         swipeContainer = findViewById(R.id.swipeContainer);
 
@@ -51,16 +49,15 @@ public class MainActivity extends AppCompatActivity {
         updateList();
         initRecyclerView();
 
-
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 updateList();
             }
         });
-
+        invalidateOptionsMenu();
     }
+
 
     private void updateList() {
         AsyncTask getData = new GetGarageCapacities().execute();
@@ -129,6 +126,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.capacity_toolbar, menu);
+
+        if(viewFacultyMode) {
+            menu.getItem(1).setVisible(false);
+            menu.getItem(0).setVisible(true);
+        }
+        else {
+
+            menu.getItem(0).setVisible(false);
+            menu.getItem(1).setVisible(true);
+        }
         return true;
     }
 
@@ -137,16 +144,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.Faculty) {
-            viewMode = false;
+            viewFacultyMode = false;
             initRecyclerView();
-            findViewById(id).setVisibility(View.GONE);
-            findViewById(R.id.Student).setVisibility(View.VISIBLE);
+            invalidateOptionsMenu();
         }
         if (id == R.id.Student) {
-            viewMode = true;
+            viewFacultyMode = true;
             initRecyclerView();
-            findViewById(id).setVisibility(View.GONE);
-            findViewById(R.id.Faculty).setVisibility(View.VISIBLE);// Makes other view unclickable
+            invalidateOptionsMenu();
         }
 
         return super.onOptionsItemSelected(item);
@@ -166,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
         maxCapacitiesFeed.clear();//resets lists
         garageNamesFeed.clear();
 
-        if (viewMode == true) {
-            garageNamesFeed.addAll(garageNames.subList(0,6));
-            maxCapacitiesFeed.addAll(maxCapacities.subList(0,6));
-            liveFeed.addAll(spotsOpen.subList(0,6));
+        if (viewFacultyMode == true) {
+            garageNamesFeed.addAll(garageNames.subList(0, 6));
+            maxCapacitiesFeed.addAll(maxCapacities.subList(0, 6));
+            liveFeed.addAll(spotsOpen.subList(0, 6));
         } else {
-            garageNamesFeed.addAll(garageNames.subList(6,8));
-            maxCapacitiesFeed.addAll(maxCapacities.subList(6,8));
-            liveFeed.addAll(spotsOpen.subList(6,8));
+            garageNamesFeed.addAll(garageNames.subList(6, 8));
+            maxCapacitiesFeed.addAll(maxCapacities.subList(6, 8));
+            liveFeed.addAll(spotsOpen.subList(6, 8));
         }
 
         recyclerViewAdapter = new RecyclerViewAdapter(this, garageNamesFeed, maxCapacitiesFeed, liveFeed);
