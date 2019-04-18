@@ -47,4 +47,5 @@
         <item>132</item>
         <item>288</item>
     </string-array>
+    <string name="title_activity_settings">Settings</string>
 </resources>

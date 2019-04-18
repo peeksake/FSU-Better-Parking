@@ -1,7 +1,11 @@
 package com.parkingoracle.parkingoracle;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenu;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private boolean viewFacultyMode; //Student or Faculty
     private String className = MainActivity.class.getSimpleName();
+    private BottomNavigationView bottomNavigationView;
+
     List<String> maxCapacities = Arrays.asList("786", "839", "1186", "795", "1118", "928", "132", "288");
     List<String> garageNames = Arrays.asList("Call Street", "Saint Augustine Street", "Spirit Way", "Traditions Way", "Pensacola Street", "Woodward Avenue", "Pensacola Street", "Woodward Avenue");
     List<String> spotsOpen = new ArrayList<>();
@@ -43,11 +50,31 @@ public class MainActivity extends AppCompatActivity {
         viewFacultyMode = true;
         toolbar = findViewById(R.id.toolbar);
         swipeContainer = findViewById(R.id.swipeContainer);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         setSupportActionBar(toolbar);
 
         updateList();
         initRecyclerView();
+
+        // Bottom Navigation Bar
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.CurrentCapacity:
+                                break;
+                            case R.id.now:
+                                startActivity(new Intent(MainActivity.this, Maps.class));
+                                break;
+                            case R.id.Settings:
+                                startActivity(new Intent(MainActivity.this, Settings.class));
+                                break;
+                        }
+                        return false;
+                    }
+                });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -132,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
             menu.getItem(0).setVisible(true);
         }
         else {
-
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(true);
         }
@@ -146,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.Faculty) {
             viewFacultyMode = false;
             initRecyclerView();
-            invalidateOptionsMenu();
+            invalidateOptionsMenu();// calls onCreateOptionsMenu
         }
         if (id == R.id.Student) {
             viewFacultyMode = true;
