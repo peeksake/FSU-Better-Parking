@@ -18,8 +18,6 @@
         android:id="@+id/slide_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_anchor="@+id/appBarLayout"
-        app:layout_anchorGravity="bottom|left"
         android:translationZ="-1dp"
         android:background="@color/colorPrimary"/>
 
